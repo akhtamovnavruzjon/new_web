@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+    <h2>Salom {{ user.user.username }} !</h2>
+    <div>
+        <img src="{{ user.avatar.url }} " alt="profile" />
+        <span>{{ user.user.email }}</span>
+        <span>{{ user.user.bio }}</span>
+    </div>
+
+
+
+{% endblock content %}

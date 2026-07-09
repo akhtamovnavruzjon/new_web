@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kunlik Vazifalar</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Segoe UI, sans-serif;
+        }
+
+        body{
+            background:linear-gradient(135deg,#4facfe,#00f2fe);
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+
+        .container{
+            width:100%;
+            max-width:650px;
+            background:#fff;
+            padding:30px;
+            border-radius:18px;
+            box-shadow:0 15px 40px rgba(0,0,0,.2);
+        }
+
+        h2{
+            text-align:center;
+            margin-bottom:25px;
+            color:#333;
+            font-size:30px;
+        }
+
+        form{
+            display:flex;
+            gap:10px;
+            margin-bottom:25px;
+        }
+
+        form input{
+            flex:1;
+            padding:13px;
+            border:2px solid #ddd;
+            border-radius:10px;
+            font-size:16px;
+            transition:.3s;
+        }
+
+        form input:focus{
+            border-color:#0d6efd;
+            outline:none;
+        }
+
+        form button{
+            background:#198754;
+            color:white;
+            border:none;
+            padding:0 25px;
+            border-radius:10px;
+            cursor:pointer;
+            font-size:15px;
+            transition:.3s;
+        }
+
+        form button:hover{
+            background:#157347;
+        }
+
+        .todo-item{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            background:#f8f9fa;
+            padding:15px 18px;
+            margin-bottom:15px;
+            border-radius:12px;
+            transition:.3s;
+        }
+
+        .todo-item:hover{
+            background:#eef4ff;
+            transform:translateY(-2px);
+        }
+
+        .todo-item span{
+            font-size:18px;
+            color:#333;
+        }
+
+        .completed{
+            text-decoration:line-through;
+            color:#888 !important;
+            font-style:italic;
+        }
+
+        .btn{
+            text-decoration:none;
+            padding:9px 15px;
+            border-radius:8px;
+            color:white;
+            font-size:14px;
+            margin-left:6px;
+            transition:.3s;
+            font-weight:bold;
+        }
+
+        .btn-blue{
+            background:#0d6efd;
+        }
+
+        .btn-blue:hover{
+            background:#0b5ed7;
+        }
+
+        .btn-red{
+            background:#dc3545;
+        }
+
+        .btn-red:hover{
+            background:#bb2d3b;
+        }
+
+
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+
+    <h2>📝 Mening Kunlik Vazifalarim</h2>
+
+    <!-- Yangi vazifa qo'shish formasi -->
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="task" placeholder="Yangi vazifa kiriting..." required>
+        <button type="submit">Qo'shish</button>
+    </form>
+
+    <!-- Vazifalar ro'yxati -->
+
+    <div>
+        {% for v in tasks %}
+        <div class="todo-item">
+
+       {% if v.is_completed %}
+        <span class="completed">{{ v.task }}</span>
+       {% else %}
+        <span>{{ v.task }}</span>
+            {% endif %}
+
+        <div>
+                <a href="{% url 'complete' v.pk %}" class="btn btn-blue">✔ Bajarildi</a>
+                <a href="#" class="btn btn-red">🗑 O'chirish</a>
+            </div>
+
+        </div>
+        {% endfor %}
+
+
+
+
+    </div>
+
+</div>
+
+</body>
+</html>

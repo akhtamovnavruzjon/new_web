@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+        <!-- Category News Start-->
+        <div class="cat-news">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h2><i class="fas fa-align-justify"></i>Texnologiya</h2>
+                        <div class="row cn-slider">
+                            {% for b in texnologiya_new %}
+                            <div class="col-md-6">
+                                <div class="cn-img">
+                                    <img src="{{ b.cover.url }}" />
+                                    <div class="cn-content">
+                                        <div class="cn-content-inner">
+                                            <a class="cn-date" href="{% url 'detail_n' b.slug %}"><i class="far fa-clock"></i>{{ b.created_at }}</a>
+                                            <a class="cn-title" href="{% url 'detail_n' b.slug %}">{{ b.title }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            <div style="margin:30px 0; text-align: center;">
+                                {% if texnologiya_new.has_previous %}
+                                <a href="?page={{ texnologiya_new.previous_page_number }}">Oldingi</a>
+                                {% endif %}
+                                <span style="margin: 0 10px;">
+                                    {{ texnologiya_new.number }} / {{ texnologiya_new.paginator.num_pages }}
+                                </span>
+
+                                {% if texnologiya_new.has_next %}
+                                <a href="?page={{ texnologiya_new.next_page_number }}">Keyingi</a>
+                                {% endif %}
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Category News End-->
+
+{% endblock content %}

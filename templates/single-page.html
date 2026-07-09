@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% block content %}
+        
+        
+        <!-- Breadcrumb Start -->
+        <div class="breadcrumb-wrap">
+            <div class="container-fluid">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">News</a></li>
+                    <li class="breadcrumb-item active">News details</li>
+                </ul>
+            </div>
+        </div>
+        <!-- Breadcrumb End -->
+        
+        
+        <!-- Single News Start-->
+        <div class="single-news">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="sn-img">
+                            <img src="{{ article.cover.url }}" />
+                        </div>
+                        <div class="sn-content">
+                            <a class="sn-title" href="">{{ article.title }}</a>
+                            <a class="sn-date" href=""><i class="far fa-clock"></i>{{ article.created_at }}</a>
+                            <span>Ko'rishlar soni-->{{ article.views_count }}</span>
+                            <p>
+                                {{ article.body }}
+                            </p>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="sidebar">
+                            <div class="sidebar-widget">
+                                <h2><i class="fas fa-align-justify"></i>Category</h2>
+                                <div class="category">
+                                    <ul class="fa-ul">
+                                        <li><span class="fa-li"><i class="far fa-arrow-alt-circle-right"></i></span><a href="">National</a></li>
+                                        <li><span class="fa-li"><i class="far fa-arrow-alt-circle-right"></i></span><a href="">International</a></li>
+                                        <li><span class="fa-li"><i class="far fa-arrow-alt-circle-right"></i></span><a href="">Economics</a></li>
+                                        <li><span class="fa-li"><i class="far fa-arrow-alt-circle-right"></i></span><a href="">Politics</a></li>
+                                        <li><span class="fa-li"><i class="far fa-arrow-alt-circle-right"></i></span><a href="">Lifestyle</a></li>
+                                        <li><span class="fa-li"><i class="far fa-arrow-alt-circle-right"></i></span><a href="">Technology</a></li>
+                                        <li><span class="fa-li"><i class="far fa-arrow-alt-circle-right"></i></span><a href="">Trades</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="sidebar-widget">
+                                <h2><i class="fas fa-align-justify"></i>Tags</h2>
+                                <div class="tags">
+                                    <a href="">National</a>
+                                    <a href="">International</a>
+                                    <a href="">Economics</a>
+                                    <a href="">Politics</a>
+                                    <a href="">Lifestyle</a>
+                                    <a href="">Technology</a>
+                                    <a href="">Trades</a>
+                                    <a href="">National</a>
+                                    <a href="">International</a>
+                                    <a href="">Economics</a>
+                                    <a href="">Politics</a>
+                                    <a href="">Lifestyle</a>
+                                    <a href="">Technology</a>
+                                    <a href="">Trades</a>
+                                </div>
+                            </div>
+
+                            <div class="sidebar-widget">
+                                <h2><i class="fas fa-align-justify"></i>Ads 1 column</h2>
+                                <div class="image">
+                                    <a href=""><img src="img/adds-1.jpg" alt="Image"></a>
+                                </div>
+                            </div>
+
+                            <div class="sidebar-widget">
+                                <h2><i class="fas fa-align-justify"></i>Ads 2 column</h2>
+                                <div class="image">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <a href=""><img src="img/adds-2.jpg" alt="Image"></a>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <a href=""><img src="img/adds-2.jpg" alt="Image"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if request.user.is_authenticated %}
+            <form method="POST" action="{% url 'like' article.slug %}">
+                  {% csrf_token %}
+                  <button type="submit">
+                      {% if likes %}
+                      ❤️
+                      {% else %}
+                      🤍
+                      {% endif %}
+                      {{ article.likes.count }}
+
+                  </button>
+            </form>
+        {% endif %}
+
+
+
+<a href="{% url 'delete_article' article.pk %}"
+   class="btn btn-danger"
+   onclick="return confirm('Rostdan ham bu yangilikni o‘chirmoqchimisiz?')">
+    🗑 {% trans 'Bu yangilikni uchirish' %}
+</a>
+        <!-- Single News End-->
+  <div class="mt-5" style="max-width: 800px;">
+
+
+
+    <h4 class="mb-4 fw-bold">
+        💬 Izohlar
+        <span class="badge bg-primary rounded-pill">
+            {{ comments.count }}
+        </span>
+    </h4>
+
+    {% for s in comments %}
+        <div style="border:1px solid #ddd; padding:10px; margin:10px;;">
+            <b>{{ s.author }} </b>:{{ s.body }}
+            {% for r in s.replies.all %}
+                <div style="margin-left:40px; border-left:3px solid #007bff; padding:5px 10px margin-top:5px;">
+                    <b>{{ r.author }} </b> &#8618; {{ r.body }}
+                </div>
+            {% endfor %}
+
+            {% if request.user.is_authenticated %}
+                <form method="POST" style="margin-top:5px;">
+                    {% csrf_token %}
+                    <input type="hidden" name="parent_id" value="{{ s.id }}"/>
+                    <input type="text" name="body" placeholder="Javob yozish...."/>
+                    <button type="submit">Javob</button>
+                </form>
+            {% endif %}
+
+
+
+        </div>
+      {% empty %}
+      <p>Hozircha izohlar yuq</p>
+    {% endfor %}
+    <div class="card border-0 shadow-sm mt-4">
+        <div class="card-body">
+
+            <h5 class="mb-3 fw-bold">
+                ✍️ Izoh qoldirish
+            </h5>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <textarea
+                    name="body"
+                    rows="4"
+                    class="form-control mb-3"
+                    placeholder="Fikringizni qoldiring..."
+                    required></textarea>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary px-4">
+                    🚀 Yuborish
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+        
+{% endblock content %}
